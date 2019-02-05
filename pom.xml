@@ -111,6 +111,13 @@
 			<version>2.5.3</version>
 		</dependency>
 
+<dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>4.2.10.RELEASE</version>
+        </dependency>
+
+
 		<!-- MySQL database driver -->
 		<dependency>
 			<groupId>mysql</groupId>
@@ -143,7 +150,13 @@
 			<artifactId>mail</artifactId>
 			<version>1.4</version>
 		</dependency>
-
+		
+<!-- https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>2.1</version>
+        </dependency>
 
 	</dependencies>
 	<build>

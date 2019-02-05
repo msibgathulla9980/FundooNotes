@@ -2,6 +2,7 @@ package com.bridgelabz.spring.dao;
 
 import java.util.List;
 
+import com.bridgelabz.spring.model.Notes;
 import com.bridgelabz.spring.model.UserDetails;
 
 public interface UserDao {
@@ -16,6 +17,8 @@ public interface UserDao {
 	UserDetails getUserByID(int id);
 	
 	List<UserDetails> getUsersList();
+	
+	 List<UserDetails> retrieve();
 	
    void delete(int id);
 }

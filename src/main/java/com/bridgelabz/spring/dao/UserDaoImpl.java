@@ -11,6 +11,7 @@ import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.bridgelabz.spring.model.Notes;
 import com.bridgelabz.spring.model.UserDetails;
 
 @Repository
@@ -45,10 +46,6 @@ public class UserDaoImpl implements UserDao {
 		Query query = session.createQuery("from UserDetails where emailId= :emailId");
 		query.setString("emailId", emailId);
 		List<UserDetails> empList = query.list();
-//		for (UserDetails emp : empList) {
-//			System.out.println("List of users::" + emp.getId() + "," + emp.getName() + "," + emp.getEmailId() + ","
-//					+ emp.getMobileNumber());
-//		}
 		UserDetails emp = (UserDetails) query.uniqueResult();
 		if (emp != null) {
 			System.out
@@ -103,7 +100,13 @@ public class UserDaoImpl implements UserDao {
 	}
 
 
-	
+	public List<UserDetails> retrieve(){
+		Session session = sessionFactory.openSession();
+		String hqlQuery = "from UserDetails	";
+		@SuppressWarnings("unchecked")
+		List<UserDetails> listOfUsers = session.createQuery(hqlQuery).list();
+		return listOfUsers;
 
 
+}
 }

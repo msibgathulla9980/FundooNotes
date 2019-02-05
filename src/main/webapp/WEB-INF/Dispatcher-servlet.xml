@@ -17,6 +17,7 @@
 
 	<context:component-scan
 		base-package="com.bridgelabz.spring" />
+<bean id="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 
 	<mvc:annotation-driven />
   <!-- SET default mail properties -->

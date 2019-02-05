@@ -65,7 +65,7 @@ public class NotesController {
 		return new ResponseEntity<String>("Notes are not found by the given Id",HttpStatus.NOT_FOUND);
 	}
 		
-	@RequestMapping(value = "/retrieve", method = RequestMethod.GET)
+	@RequestMapping(value = "/retrieveNotes", method = RequestMethod.GET)
 	public ResponseEntity<?> retrieve( HttpServletRequest request)
 	{
 		List<Notes> listOfNotes=notesService.retrieve(request);

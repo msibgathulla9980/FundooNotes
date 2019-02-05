@@ -1,7 +1,6 @@
 package com.bridgelabz.spring.utility;
 
 import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
@@ -19,7 +18,7 @@ public class EmailUtil {
 
             msg.setFrom("msibgathulla@gmail.com");
 
-            msg.setTo("tharungandhi636@gmail.com");
+            msg.setTo("msibgathulla@gmail.com");
 
             msg.setSubject(subject);
 

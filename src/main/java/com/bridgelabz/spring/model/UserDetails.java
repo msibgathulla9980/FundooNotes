@@ -22,6 +22,14 @@
 		@Column(name="activation_status")
 	    private boolean activationStatus;
 		
+		public boolean isActivationStatus() {
+			return activationStatus;
+		}
+
+		public void setActivationStatus(boolean activationStatus) {
+			this.activationStatus = activationStatus;
+		}
+
 		@Column(name = "name")
 		private String name;		
 
