@@ -2,16 +2,12 @@ package com.bridgelabz.spring.dao;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import com.bridgelabz.spring.model.Notes;
 import com.bridgelabz.spring.model.UserDetails;
 
 @Repository
@@ -45,11 +41,9 @@ public class UserDaoImpl implements UserDao {
 			Transaction tr=session.beginTransaction();
 		Query query = session.createQuery("from UserDetails where emailId= :emailId");
 		query.setString("emailId", emailId);
-		List<UserDetails> empList = query.list();
 		UserDetails emp = (UserDetails) query.uniqueResult();
 		if (emp != null) {
-			System.out
-					.println("User details are=" + emp.getName() + "," + emp.getEmailId() + "," + emp.getMobileNumber());
+			System.out.println("User details are=" + emp.getName() + "," + emp.getEmailId() + "," + emp.getMobileNumber());
 			tr.commit();
 			session.close();
 			return emp;
@@ -77,9 +71,9 @@ public class UserDaoImpl implements UserDao {
 		if(user!=null) {
 			System.out.println("User Details are :"+emp.getId()+emp.getName()+emp.getEmailId());
 		tr.commit();
-		session.close();
 		System.out.println(emp);
 		}
+		session.close();
 		return emp;
 		
 	}

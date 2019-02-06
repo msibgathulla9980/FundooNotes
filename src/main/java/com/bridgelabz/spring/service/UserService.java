@@ -4,14 +4,13 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.bridgelabz.spring.model.Notes;
 import com.bridgelabz.spring.model.UserDetails;
 
 public interface UserService {
 	
 	boolean register(UserDetails user, HttpServletRequest request);
 	
-	UserDetails login(String emailId, HttpServletRequest request);
+	UserDetails login(String emailId,String password, HttpServletRequest request, HttpServletRequest response);
 	
 	UserDetails update(int id,UserDetails user1,HttpServletRequest request);	
 	
@@ -22,4 +21,3 @@ public interface UserService {
 	 UserDetails activateUser(String token, HttpServletRequest request);
 	
 	}
-

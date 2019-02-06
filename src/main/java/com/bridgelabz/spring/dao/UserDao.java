@@ -2,7 +2,6 @@ package com.bridgelabz.spring.dao;
 
 import java.util.List;
 
-import com.bridgelabz.spring.model.Notes;
 import com.bridgelabz.spring.model.UserDetails;
 
 public interface UserDao {

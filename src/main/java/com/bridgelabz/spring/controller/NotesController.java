@@ -19,10 +19,10 @@ public class NotesController {
 	@Autowired
 	private NotesService notesService;
 
-	@RequestMapping(value = "/registerNotes", method = RequestMethod.POST)
-	public ResponseEntity<String> createNotes(@RequestBody Notes usernotes, HttpServletRequest request) {
+	@RequestMapping(value = "/createNotes", method = RequestMethod.POST)
+	public ResponseEntity<String> createNotes(@RequestParam("user_id") int user_id,@RequestBody Notes usernotes, HttpServletRequest request) {
 		try {
-			if (notesService.createdNotes(usernotes, request))
+			if (notesService.createdNotes(user_id,usernotes, request))
 				return new ResponseEntity<String>("Notes Created Successfully",HttpStatus.OK);
 			
 		} catch (Exception e) {
@@ -30,6 +30,14 @@ public class NotesController {
 			return new ResponseEntity<String>(HttpStatus.CONFLICT);
 		}
 		return new ResponseEntity<String>(HttpStatus.CONFLICT);
+	}
+
+	public NotesService getNotesService() {
+		return notesService;
+	}
+
+	public void setNotesService(NotesService notesService) {
+		this.notesService = notesService;
 	}
 
 	@RequestMapping(value = "/deleteNotes", method = RequestMethod.DELETE)

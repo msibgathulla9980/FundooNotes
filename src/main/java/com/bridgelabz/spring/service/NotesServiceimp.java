@@ -1,33 +1,41 @@
 package com.bridgelabz.spring.service;
 
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
-
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.bridgelabz.spring.dao.NotesDao;
+import com.bridgelabz.spring.dao.UserDao;
 import com.bridgelabz.spring.model.Notes;
+import com.bridgelabz.spring.model.UserDetails;
 
 @Service
 public class NotesServiceimp implements NotesService {
 	@Autowired
 	private NotesDao notesDao;
-
+	
+	@Autowired
+	private UserDao userDao;
+	
 	@SuppressWarnings("unused")
 	@Autowired
 	private SessionFactory sessionFactory;
 
 	@Transactional
-	public boolean createdNotes(Notes usernotes, HttpServletRequest request) {
+	public boolean createdNotes(int user_id,Notes usernotes, HttpServletRequest request) {
+		UserDetails user=userDao.getUserByID(user_id);
+		System.out.println(user);
+		if(user!=null) {
+			usernotes.setUser_id(user);
+		
 		int id = notesDao.createdNotes(usernotes);
 		if (id > 0) {
 			//String token = generateToken.generateToken(String.valueOf(id));
 			//System.out.println(token);
 			return true;
+		}
 		}
 		return false;
 	}

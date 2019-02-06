@@ -35,11 +35,11 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ResponseEntity<?> login(@RequestParam String emailId, HttpServletRequest request) {
+	public ResponseEntity<?> login(@RequestParam("emailId") String emailId, @RequestParam("password")String password, HttpServletRequest request, HttpServletRequest response) {
 		 
-			UserDetails userDetails=userService.login(emailId, request);
+			UserDetails userDetails=userService.login(emailId,password, request,response);
 			if(userDetails!=null) {
-				return new ResponseEntity<UserDetails>(userDetails,HttpStatus.FOUND);	
+				return new ResponseEntity<String>("User has been activated successfully",HttpStatus.FOUND);	
 			}
 			else
 			{

@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -44,16 +46,14 @@ public class Notes implements Serializable{
 	@UpdateTimestamp
 	private Timestamp createdTime;
 
-
+@ManyToOne
+@JoinColumn(name="user_id")
+private UserDetails user_id;
 	
-
 
 	public int getId() {
 		return id;
 	}
-
-
-
 
 
 	public void setId(int id) {
@@ -178,7 +178,23 @@ public class Notes implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Notes [id=" + id + ", title=" + title + ", description=" + description + ", isPinned=" + isPinned + ", inTrash=" + inTrash + ", updatedTime=" + updatedTime + ", createdTime=" + createdTime + ", isArchive=" + isArchive + " ]";
+		return "Notes [id=" + id + ", title=" + title + ", description=" + description + ", isPinned=" + isPinned + ", inTrash=" + inTrash + ", updatedTime=" + updatedTime + ", createdTime=" + createdTime + ", isArchive=" + isArchive + ", user_id=" + user_id + "]";
+	}
+
+
+
+
+
+	public UserDetails getUser_id() {
+		return user_id;
+	}
+
+
+
+
+
+	public void setUser_id(UserDetails user_id) {
+		this.user_id = user_id;
 	}
 
 }

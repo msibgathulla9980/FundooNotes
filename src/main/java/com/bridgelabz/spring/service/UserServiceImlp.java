@@ -1,6 +1,6 @@
 package com.bridgelabz.spring.service;
-import java.util.List;
 
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.hibernate.SessionFactory;
 import org.hibernate.sql.ordering.antlr.GeneratedOrderByFragmentRendererTokenTypes;
@@ -20,10 +20,13 @@ import com.bridgelabz.spring.utility.TokenGenerator;
 @SuppressWarnings("unused")
 @Service
 public class UserServiceImlp implements UserService  {
+	
 	@Autowired
 	private SessionFactory sessionFactory;
+	
 	@Autowired
 	private TokenGenerator generateToken;
+	
 	@Autowired
 	private UserDao userDao;
 	
@@ -51,8 +54,15 @@ public class UserServiceImlp implements UserService  {
 		return false;
 	}
 	@Transactional
-	public UserDetails login(String emailId, HttpServletRequest request) {
-		return userDao.login(emailId);
+	public UserDetails login(String emailId,String password, HttpServletRequest request, HttpServletRequest response) {
+		UserDetails user=userDao.login(emailId);
+	if(bcryptEncoder.matches(password, user.getPassword()) && user.isActivationStatus()==true){
+		String token=generateToken.generateToken(String.valueOf(user.getId()));
+		 user.setPassword(bcryptEncoder.encode(user.getPassword()));
+
+		 return user;
+	}
+		return null;
 	}
 
 	@Transactional
@@ -84,7 +94,7 @@ public class UserServiceImlp implements UserService  {
 	        return null;
 	}
 	
-	@Transactional
+	//@Transactional
 	public UserDetails activateUser(String token, HttpServletRequest request) {
 		
         int id=generateToken.verifyToken(token);
@@ -93,8 +103,10 @@ public class UserServiceImlp implements UserService  {
         {
             user.setActivationStatus(true);
             userDao.update(id, user);
+            return user;
         }
-        return user;
+		return null;
+       
     }
 	
 	public TokenGenerator tokenGenerator() {
