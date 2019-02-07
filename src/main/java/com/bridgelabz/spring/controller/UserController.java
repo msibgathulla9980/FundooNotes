@@ -2,6 +2,7 @@ package com.bridgelabz.spring.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,7 +36,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ResponseEntity<?> login(@RequestParam("emailId") String emailId, @RequestParam("password")String password, HttpServletRequest request, HttpServletRequest response) {
+	public ResponseEntity<?> login(@RequestParam("emailId") String emailId, @RequestParam("password")String password, HttpServletRequest request, HttpServletResponse response) {
 		 
 			UserDetails userDetails=userService.login(emailId,password, request,response);
 			if(userDetails!=null) {
@@ -85,9 +86,9 @@ public class UserController {
 
 	
 	@RequestMapping(value = "/retrieveUsers", method = RequestMethod.GET)
-	public ResponseEntity<?> retrieve( HttpServletRequest request)
+	public ResponseEntity<?> retrieve( @RequestParam("id") int id,HttpServletRequest request)
 	{
-		List<UserDetails> listOfUsers=userService.retrieve(request);
+		List<UserDetails> listOfUsers=userService.retrieve(id,request);
 		if(!listOfUsers.isEmpty()) {
 			 return new ResponseEntity<List<UserDetails>>(listOfUsers, HttpStatus.FOUND);
 		}

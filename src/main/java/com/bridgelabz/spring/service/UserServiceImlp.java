@@ -2,6 +2,8 @@ package com.bridgelabz.spring.service;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.sql.ordering.antlr.GeneratedOrderByFragmentRendererTokenTypes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import com.bridgelabz.spring.model.UserDetails;
 import com.bridgelabz.spring.utility.EmailUtil;
 import com.bridgelabz.spring.utility.JwtGenerator;
 import com.bridgelabz.spring.utility.TokenGenerator;
+
 
 
 
@@ -54,14 +57,15 @@ public class UserServiceImlp implements UserService  {
 		return false;
 	}
 	@Transactional
-	public UserDetails login(String emailId,String password, HttpServletRequest request, HttpServletRequest response) {
+	public UserDetails login(String emailId,String password, HttpServletRequest request, HttpServletResponse response) {
 		UserDetails user=userDao.login(emailId);
 	if(bcryptEncoder.matches(password, user.getPassword()) && user.isActivationStatus()==true){
+		user.setPassword(bcryptEncoder.encode(user.getPassword()));
 		String token=generateToken.generateToken(String.valueOf(user.getId()));
-		 user.setPassword(bcryptEncoder.encode(user.getPassword()));
-
+	      response.setHeader("Token",token);
 		 return user;
 	}
+	
 		return null;
 	}
 
@@ -86,11 +90,14 @@ public class UserServiceImlp implements UserService  {
 	}
 	
 	@Transactional
-	public List<UserDetails> retrieve(HttpServletRequest request) {
+	public List<UserDetails> retrieve(int id,HttpServletRequest request) {
+		UserDetails user=userDao.getUserByID(id);
+		if(user!=null) {
 		 List<UserDetails> listOfUsers = userDao.retrieve();
 	        if (!listOfUsers.isEmpty()) {
 	            return listOfUsers;
 	        }
+		}
 	        return null;
 	}
 	

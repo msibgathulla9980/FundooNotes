@@ -1,4 +1,5 @@
 com/bridgelabz/spring/utility/EmailUtil.class
+com/bridgelabz/spring/model/Label.class
 com/bridgelabz/spring/dao/UserDao.class
 com/bridgelabz/spring/model/Notes.class
 com/bridgelabz/spring/service/NotesServiceimp.class

@@ -2,16 +2,27 @@ package com.bridgelabz.spring.model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import org.hibernate.annotations.UpdateTimestamp;
 
-@SuppressWarnings("serial")
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+@SuppressWarnings({ "serial", "unused" })
 @Entity
 @Table(name= "Notes")
 public class Notes implements Serializable{
@@ -47,9 +58,49 @@ public class Notes implements Serializable{
 	private Timestamp createdTime;
 
 @ManyToOne
-@JoinColumn(name="user_id")
+@JoinColumn(name="user_id",nullable=false)
 private UserDetails user_id;
-	
+
+@ManyToMany(fetch = FetchType.EAGER, targetEntity = Label.class, cascade = { CascadeType.ALL })
+@JoinTable(name = "Note_Label", joinColumns = { @JoinColumn(name = "noteId") }, inverseJoinColumns = {
+        @JoinColumn(name = "labelId") })
+private List<Label> listOfLabels;
+
+public List<Label> getListOfLabels() {
+	return listOfLabels;
+}
+
+
+public void setListOfLabels(List<Label> listOfLabels) {
+	this.listOfLabels = listOfLabels;
+}
+
+public int getNoteID() {
+	return noteID;
+}
+
+
+public void setNoteID(int noteID) {
+	this.noteID = noteID;
+}
+
+
+public int getLabelId() {
+	return labelId;
+}
+
+
+public void setLabelId(int labelId) {
+	this.labelId = labelId;
+}
+
+
+
+
+
+private int noteID;
+
+private int labelId;
 
 	public int getId() {
 		return id;

@@ -3,6 +3,7 @@ package com.bridgelabz.spring.model;
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -90,10 +91,22 @@ public class UserDetails implements Serializable
 		this.mobileNumber = mobileNumber;
 	}
 
-	@OneToMany(mappedBy="user_id")
+	@OneToMany(cascade = CascadeType.ALL,mappedBy="user_id")
 	@JsonIgnore
 	private Set<Notes> notes;
+	
+	@OneToMany(mappedBy="userId")
+	@JsonIgnore
+	private Set<Label> labels;
 
+
+	public Set<Label> getLabels() {
+		return labels;
+	}
+
+	public void setLabels(Set<Label> labels) {
+		this.labels = labels;
+	}
 
 	@Override
 	public String toString() {
