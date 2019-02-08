@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,41 +36,48 @@ public class UserController {
 		return new ResponseEntity<String>(HttpStatus.CONFLICT);
 	}
 
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public ResponseEntity<?> login(@RequestParam("emailId") String emailId, @RequestParam("password")String password, HttpServletRequest request, HttpServletResponse response) {
-		 
-			UserDetails userDetails=userService.login(emailId,password, request,response);
-			if(userDetails!=null) {
-				return new ResponseEntity<String>("User has been activated successfully",HttpStatus.FOUND);	
-			}
-			else
-			{
-				return new ResponseEntity<String>("User not found by the given Email Id",HttpStatus.NOT_FOUND);	
-			}
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public ResponseEntity<?> login(@RequestBody UserDetails user, HttpServletRequest request, HttpServletResponse response) {
 		
+			UserDetails userDetails=userService.login(user, request,response);
+			if(userDetails!=null) {
+				return new ResponseEntity<String>("User has been activated and found successfully",HttpStatus.FOUND);	
+			
+		 }
+		 
+		 
+			 return new ResponseEntity<String>("User not found by the given Email Id",HttpStatus.NOT_FOUND);	
+		 
+		
+			
+	
 		
 	}
-	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	 public ResponseEntity<String> update(@RequestParam("id") int id,@RequestBody UserDetails user, HttpServletRequest request)
-	{
-		try {
 	
-		if(userService.update(id, user, request)!=null) {
+	
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	 public ResponseEntity<String> update(@RequestHeader("token") String token, @RequestBody UserDetails existinguser, HttpServletRequest request)
+	{
+//		try {
+	
+		if(userService.update(token, existinguser, request)!=null) {
 			return new ResponseEntity<String>("User Successfully Updated", HttpStatus.OK);
 		}
 		else
+			
 		return new ResponseEntity<String>("User details incorrect, Please provide correct details",HttpStatus.CONFLICT);
-	}catch (Exception e) {
-	 
-	}
-		return new ResponseEntity<String>("User not found by the given Email Id",HttpStatus.NOT_FOUND);
+//	}
+//		catch (Exception e) {
+//	 
+//	}
+//		return new ResponseEntity<String>("User not found by the given Email Id",HttpStatus.NOT_FOUND);
 	}
 	
 	@RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-	public ResponseEntity<String> delete(@RequestParam("id") int id, HttpServletRequest request)
+	public ResponseEntity<String> delete(@RequestHeader("token") String token, HttpServletRequest request)
 	{
 		  try {
-              if (userService.delete(id,request)!=null)
+              if (userService.delete(token,request)!=null)
             	 return new ResponseEntity<String>("User Succesfully deleted",HttpStatus.FOUND);
               else
             	  return  new ResponseEntity<String>("User not Found by given  Id",HttpStatus.NOT_FOUND);
@@ -86,11 +94,11 @@ public class UserController {
 
 	
 	@RequestMapping(value = "/retrieveUsers", method = RequestMethod.GET)
-	public ResponseEntity<?> retrieve( @RequestParam("id") int id,HttpServletRequest request)
+	public ResponseEntity<?> retrieve( @RequestHeader("token") String token,HttpServletRequest request)
 	{
-		List<UserDetails> listOfUsers=userService.retrieve(id,request);
-		if(!listOfUsers.isEmpty()) {
-			 return new ResponseEntity<List<UserDetails>>(listOfUsers, HttpStatus.FOUND);
+		List<UserDetails> users=userService.retrieve(token,request);
+		if(!users.isEmpty()) {
+			 return new ResponseEntity<List<UserDetails>>(users, HttpStatus.FOUND);
 		}
 		else 
 		{

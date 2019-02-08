@@ -11,13 +11,13 @@ public interface UserService {
 	
 	boolean register(UserDetails user, HttpServletRequest request);
 	
-	UserDetails login(String emailId,String password, HttpServletRequest request, HttpServletResponse response);
+	UserDetails login(UserDetails user, HttpServletRequest request, HttpServletResponse response);
 	
-	UserDetails update(int id,UserDetails user1,HttpServletRequest request);	
+	UserDetails update(String token,UserDetails existinguser,HttpServletRequest request);	
 	
-	UserDetails delete(int id,HttpServletRequest request);
+	UserDetails delete(String token,HttpServletRequest request);
 	
-	List<UserDetails> retrieve(int id,HttpServletRequest request);
+	List<UserDetails> retrieve(String token,HttpServletRequest request);
 	
 	 UserDetails activateUser(String token, HttpServletRequest request);
 	

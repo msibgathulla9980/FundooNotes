@@ -7,18 +7,19 @@ import com.bridgelabz.spring.model.UserDetails;
 public interface UserDao {
 
 	int register(UserDetails user);
-    Object user=null;
-   
+	Object user=null;
+
 	UserDetails login(String emailId);
 
 	UserDetails update(int id,UserDetails user1);
-   
+
 	UserDetails getUserByID(int id);
-	
+
 	List<UserDetails> getUsersList();
-	
-	 List<UserDetails> retrieve();
-	
-   void delete(int id);
+
+	List<UserDetails> retrieve(int verifyId);
+
+	void delete(int id);
+
 }
 

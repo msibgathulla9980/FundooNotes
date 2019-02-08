@@ -41,15 +41,15 @@ public class UserDaoImpl implements UserDao {
 			Transaction tr=session.beginTransaction();
 		Query query = session.createQuery("from UserDetails where emailId= :emailId");
 		query.setString("emailId", emailId);
-		UserDetails emp = (UserDetails) query.uniqueResult();
-		if (emp != null) {
-			System.out.println("User details are=" + emp.getName() + "," + emp.getEmailId() + "," + emp.getMobileNumber());
+		UserDetails user = (UserDetails) query.uniqueResult();
+		if (user != null) {
+			//System.out.println("User details are=" + user.getName() + "," + user.getEmailId() + "," + user.getMobileNumber());
 			tr.commit();
-			session.close();
-			return emp;
-		} else {
-			return null;
+		   session.close();
+		   return user;
+			
 		}
+			return null;
 
 	}
 	
@@ -67,14 +67,14 @@ public class UserDaoImpl implements UserDao {
 		Transaction tr=session.beginTransaction();
 		Query query=session.createQuery("from UserDetails where id= :id");
 		query.setInteger("id",id);
-		UserDetails emp=(UserDetails) query.uniqueResult();
+		UserDetails user=(UserDetails) query.uniqueResult();
 		if(user!=null) {
-			System.out.println("User Details are :"+emp.getId()+emp.getName()+emp.getEmailId());
+			System.out.println("User Details are :"+user.getId()+user.getName()+user.getEmailId());
 		tr.commit();
-		System.out.println(emp);
+		System.out.println(user);
 		}
 		session.close();
-		return emp;
+		return user;
 		
 	}
 
@@ -94,11 +94,14 @@ public class UserDaoImpl implements UserDao {
 	}
 
 
-	public List<UserDetails> retrieve(){
+	@SuppressWarnings("unchecked")
+	public List<UserDetails> retrieve(int verifyId){
 		Session session = sessionFactory.openSession();
-		String hqlQuery = "from UserDetails	";
+		Query query = session.createQuery("from UserDetails  where verifyId= :verifyId");
+		query.setInteger("verifyId", verifyId);
 		@SuppressWarnings("unchecked")
-		List<UserDetails> listOfUsers = session.createQuery(hqlQuery).list();
+		String strquery=Integer.toString(verifyId);
+		List<UserDetails> listOfUsers = session.createQuery(strquery).list();
 		return listOfUsers;
 
 

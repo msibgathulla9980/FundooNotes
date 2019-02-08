@@ -93,7 +93,7 @@ public class UserDetails implements Serializable
 
 	@OneToMany(cascade = CascadeType.ALL,mappedBy="user_id")
 	@JsonIgnore
-	private Set<Notes> notes;
+	private Set<Note> notes;
 	
 	@OneToMany(mappedBy="userId")
 	@JsonIgnore
@@ -114,11 +114,11 @@ public class UserDetails implements Serializable
 				+ ", mobileNumber=" + mobileNumber+"]";
 	}
 
-	public Set<Notes> getNotes() {
+	public Set<Note> getNotes() {
 		return notes;
 	}
 
-	public void setNotes(Set<Notes> notes) {
+	public void setNotes(Set<Note> notes) {
 		this.notes = notes;
 	}
 	

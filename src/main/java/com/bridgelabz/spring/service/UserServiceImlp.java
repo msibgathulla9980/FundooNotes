@@ -11,7 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.bridgelabz.spring.dao.UserDao;
-import com.bridgelabz.spring.model.Notes;
+import com.bridgelabz.spring.model.Note;
 import com.bridgelabz.spring.model.UserDetails;
 import com.bridgelabz.spring.utility.EmailUtil;
 import com.bridgelabz.spring.utility.JwtGenerator;
@@ -47,8 +47,6 @@ public class UserServiceImlp implements UserService  {
 		int id = userDao.register(user);
 		if (id > 0) {
 			String token = generateToken.generateToken(String.valueOf(id));
-	
-			System.out.println(token);
 			String link=" Please click the link below to verify. \n\nhttp://localhost:8080/FundooNotes/activationstatus/"+token+"\n\nRegards,\nMohammed Sibgathulla.";
 			user.setPassword(bcryptEncoder.encode(user.getPassword()));//encrypting the password here and storing it as a hash key 
 			email.sendEmail("msibgathulla@gmail.com", "Registration Mail", link);
@@ -57,51 +55,56 @@ public class UserServiceImlp implements UserService  {
 		return false;
 	}
 	@Transactional
-	public UserDetails login(String emailId,String password, HttpServletRequest request, HttpServletResponse response) {
-		UserDetails user=userDao.login(emailId);
-	if(bcryptEncoder.matches(password, user.getPassword()) && user.isActivationStatus()==true){
-		user.setPassword(bcryptEncoder.encode(user.getPassword()));
-		String token=generateToken.generateToken(String.valueOf(user.getId()));
+	public UserDetails login(UserDetails user, HttpServletRequest request, HttpServletResponse response) {
+		UserDetails existinguser=userDao.login(user.getEmailId());//pass=user entered password, actual password present in the db.
+	if(bcryptEncoder.matches(user.getPassword(), existinguser.getPassword()) && existinguser.isActivationStatus()==true){
+//		user.setPassword(bcryptEncoder.encode(user.getPassword()));
+		String token=generateToken.generateToken(String.valueOf(existinguser.getId()));
 	      response.setHeader("Token",token);
-		 return user;
+		 return existinguser;
 	}
 	
 		return null;
 	}
 
 	@Transactional
-	public UserDetails update(int id,UserDetails user,HttpServletRequest request) {
-		UserDetails user1=userDao.getUserByID(id);
-		if(user1!=null) {
-			user1.setName(user.getName());
-			user1.setEmailId(user.getEmailId());
-			user1.setPassword(user.getPassword());
-			user1.setMobileNumber(user.getMobileNumber());
-			userDao.update(id, user1);
+	public UserDetails update(String token,UserDetails user,HttpServletRequest request) {
+		int id=generateToken.verifyToken(token);
+		UserDetails existinguser=userDao.getUserByID(id);
+		System.out.println(existinguser);
+		if(existinguser!=null) {
+			existinguser.setName(user.getName());
+			existinguser.setEmailId(user.getEmailId());
+			existinguser.setPassword(user.getPassword());
+			existinguser.setMobileNumber(user.getMobileNumber());
+			userDao.update(id, existinguser);
 		}
-		return user1;
+		return existinguser;
 	}
 
 	@Transactional
-	public UserDetails delete(int id,HttpServletRequest request) {
-		UserDetails user2=userDao.getUserByID(id);
+	public UserDetails delete(String token,HttpServletRequest request) {
+		int id=generateToken.verifyToken(token);
+		UserDetails existinguser=userDao.getUserByID(id);
 		userDao.delete(id);
-		return user2;
+		return existinguser;
 	}
 	
 	@Transactional
-	public List<UserDetails> retrieve(int id,HttpServletRequest request) {
+	public List<UserDetails> retrieve(String token,HttpServletRequest request) {
+		int id=generateToken.verifyToken(token);
 		UserDetails user=userDao.getUserByID(id);
 		if(user!=null) {
-		 List<UserDetails> listOfUsers = userDao.retrieve();
-	        if (!listOfUsers.isEmpty()) {
-	            return listOfUsers;
+			int verifyId=generateToken.verifyToken(token);
+		 List<UserDetails> users = userDao.retrieve(verifyId);
+	        if (!users.isEmpty()) {
+	            return users;
 	        }
 		}
 	        return null;
 	}
 	
-	//@Transactional
+	@Transactional
 	public UserDetails activateUser(String token, HttpServletRequest request) {
 		
         int id=generateToken.verifyToken(token);
@@ -116,10 +119,7 @@ public class UserServiceImlp implements UserService  {
        
     }
 	
-	public TokenGenerator tokenGenerator() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 }
 
 
